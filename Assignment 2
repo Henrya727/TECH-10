@@ -1,0 +1,26 @@
+#include <Arduino.h>
+
+// Function to concatenate string A with itself N times
+String repeatString(int N, String A) {
+    String result = "";
+    for (int i = 0; i < N; i++) {
+        result += A;  
+    }
+    return result; 
+}
+
+void setup() {
+    // Start serial communication
+    Serial.begin(115200);
+
+    // Example inputs
+    int N = 12;
+    String A = "Henry";
+
+    // Print original string and repetition count
+    Serial.println(repeatString(N,A));
+}
+
+void loop() {
+    // No repeated code here for this example
+}
