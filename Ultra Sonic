@@ -1,0 +1,51 @@
+#include <Arduino.h>
+#include <TimerOne.h>
+//const int trig=2; // make it constant
+#define trig 2
+#define echo 3
+int t0=0;
+unsigned long t1=0;
+unsigned long t2=0;
+bool available = false;
+void interrupt_function(){
+    if (digitalRead(echo) == HIGH){
+        t1 = micros();
+    }
+    else{
+        t2= micros(); 
+        available=true;
+    }
+}
+void trigger(){
+digitalWrite(trig,HIGH);
+    // delay (0,01):
+    delayMicroseconds(500);
+    digitalWrite(trig,LOW);
+}
+
+void setup(){
+Serial.begin(115200);
+pinMode(trig, OUTPUT);
+pinMode(echo, INPUT);
+Timer1.initialize(100000);
+Timer1.attachInterrupt(trigger);
+attachInterrupt(digitalPinToInterrupt(echo), interrupt_function , CHANGE);
+
+
+}
+// unsigned no sign, positive
+// long: an int with twice memory
+void loop(){
+    if (available = true){
+        noInterrupts();
+        unsigned Ta = t2-t1;
+        float x = ((t2-t1) / 2 * 343 * pow(10,-4));
+        String A ="The Distance is ";
+        String B =" Centimeters";
+        Serial.println(A+String(x)+B);
+        available=false;
+        interrupts();
+    }
+// delay(100);
+
+    }
